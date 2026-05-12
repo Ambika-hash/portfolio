@@ -1,0 +1,463 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --pink1:#ffd6e7;--pink2:#ffadd2;--pink3:#ff85c2;--pink4:#eb2f96;
+    --pink5:#c41d7f;--dark:#1a0010;--cream:#fff0f6;
+    --pixel:2px;
+  }
+  .portfolio{
+    background:#1a0010;
+    font-family:'Press Start 2P',monospace;
+    color:#ffd6e7;
+    min-height:100vh;
+    padding:0 0 40px;
+    overflow:hidden;
+  }
+  /* scanline overlay */
+  .portfolio::before{
+    content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+    pointer-events:none;z-index:999;
+  }
+  /* HERO */
+  .hero{
+    background:#2d0020;
+    border-bottom:4px solid #eb2f96;
+    padding:32px 24px 24px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-stars{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none}
+  .star{
+    position:absolute;width:4px;height:4px;background:#ffadd2;
+    animation:blink 1.5s infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.1}}
+  .avatar{
+    width:80px;height:80px;
+    margin:0 auto 16px;
+    image-rendering:pixelated;
+    border:4px solid #eb2f96;
+    background:#2d0020;
+    position:relative;
+  }
+  .avatar-inner{
+    width:100%;height:100%;
+    display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);
+    gap:0;
+  }
+  .pixel{display:block;width:100%;height:100%}
+  .name{
+    font-size:13px;color:#ff85c2;
+    text-shadow:2px 2px 0 #c41d7f;
+    letter-spacing:2px;margin-bottom:8px;
+    animation:glow 2s infinite alternate;
+  }
+  @keyframes glow{from{text-shadow:2px 2px 0 #c41d7f}to{text-shadow:2px 2px 0 #c41d7f,0 0 12px #eb2f96}}
+  .tagline{font-size:6px;color:#ffadd2;line-height:1.8;max-width:400px;margin:0 auto 16px}
+  .contact-row{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;
+  }
+  .contact-chip{
+    font-size:5px;padding:6px 10px;
+    background:#3d0028;
+    border:2px solid #eb2f96;
+    color:#ffadd2;cursor:pointer;
+    transition:background 0.1s;
+  }
+  .contact-chip:hover{background:#eb2f96;color:#1a0010}
+  /* NAVBAR */
+  .nav{
+    display:flex;justify-content:center;flex-wrap:wrap;gap:0;
+    background:#250018;
+    border-bottom:4px solid #c41d7f;
+    padding:0;
+  }
+  .nav-btn{
+    font-family:'Press Start 2P',monospace;
+    font-size:6px;
+    padding:12px 14px;
+    background:transparent;border:none;
+    color:#ff85c2;cursor:pointer;
+    border-right:2px solid #3d0028;
+    transition:all 0.1s;
+  }
+  .nav-btn:hover,.nav-btn.active{background:#eb2f96;color:#1a0010}
+  /* SECTIONS */
+  .section{display:none;padding:24px 16px}
+  .section.active{display:block}
+  .section-title{
+    font-size:9px;color:#ff85c2;
+    text-shadow:2px 2px 0 #c41d7f;
+    margin-bottom:20px;
+    padding-bottom:8px;
+    border-bottom:2px solid #3d0028;
+  }
+  .section-title::before{content:"▶ ";color:#eb2f96}
+  /* CARDS */
+  .card{
+    background:#250018;
+    border:2px solid #3d0028;
+    border-left:4px solid #eb2f96;
+    padding:14px;margin-bottom:14px;
+  }
+  .card:hover{border-color:#ff85c2;background:#2d0020}
+  .card-title{font-size:7px;color:#ff85c2;margin-bottom:8px}
+  .card-sub{font-size:5px;color:#ffadd2;line-height:1.9}
+  .card-tag{
+    display:inline-block;font-size:5px;
+    padding:3px 7px;margin:3px 2px 0;
+    background:#3d0028;border:1px solid #c41d7f;
+    color:#ffadd2;
+  }
+  /* SKILLS GRID */
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+  .skill-box{
+    background:#250018;border:2px solid #3d0028;
+    padding:12px 10px;text-align:center;
+  }
+  .skill-box:hover{border-color:#eb2f96}
+  .skill-cat{font-size:5px;color:#eb2f96;margin-bottom:8px}
+  .skill-item{font-size:5px;color:#ffadd2;line-height:2.2;display:block}
+  /* STAT BARS */
+  .stat-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .stat-label{font-size:5px;color:#ffadd2;width:90px;flex-shrink:0;text-align:right}
+  .stat-bar{flex:1;height:10px;background:#1a0010;border:1px solid #3d0028;position:relative}
+  .stat-fill{
+    height:100%;background:#eb2f96;
+    animation:fillbar 1.2s ease forwards;transform-origin:left;
+  }
+  @keyframes fillbar{from{width:0}to{width:var(--w)}}
+  .stat-val{font-size:5px;color:#ff85c2;width:30px}
+  /* RESEARCH */
+  .research-box{
+    background:#250018;border:2px solid #eb2f96;
+    padding:16px;margin-bottom:14px;
+  }
+  .research-badge{
+    display:inline-block;font-size:5px;
+    padding:4px 10px;background:#eb2f96;
+    color:#1a0010;margin-bottom:10px;
+  }
+  .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .metric{background:#1a0010;border:1px solid #3d0028;padding:10px;text-align:center}
+  .metric-val{font-size:9px;color:#ff85c2;display:block;margin-bottom:4px;
+    text-shadow:1px 1px 0 #c41d7f}
+  .metric-label{font-size:5px;color:#ffadd2}
+  /* CURSOR BLINK */
+  .cursor{display:inline-block;animation:blink 0.8s infinite}
+  /* PIXEL decorations */
+  .pixel-deco{
+    display:flex;gap:4px;justify-content:center;margin:16px 0;
+  }
+  .pixel-heart{
+    width:12px;height:12px;background:#eb2f96;
+    clip-path:polygon(25% 0%,50% 10%,75% 0%,100% 25%,100% 50%,75% 75%,50% 100%,25% 75%,0% 50%,0% 25%);
+    animation:pulse 1s infinite alternate;
+  }
+  @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.2)}}
+  .pixel-heart:nth-child(2){animation-delay:0.2s}
+  .pixel-heart:nth-child(3){animation-delay:0.4s}
+  /* INTERNSHIP */
+  .timeline{border-left:2px solid #eb2f96;padding-left:16px;margin-left:8px}
+  .timeline-dot{
+    width:10px;height:10px;background:#eb2f96;
+    display:inline-block;margin-left:-21px;margin-right:11px;vertical-align:middle;
+  }
+  .timeline-title{font-size:6px;color:#ff85c2;display:inline-block}
+  .timeline-meta{font-size:5px;color:#c41d7f;margin:6px 0 4px}
+  .timeline-body{font-size:5px;color:#ffadd2;line-height:2;margin-top:6px}
+  /* CERT PILLS */
+  .cert-list{display:flex;flex-direction:column;gap:10px}
+  .cert-item{
+    display:flex;align-items:flex-start;gap:12px;
+    background:#250018;border:2px solid #3d0028;padding:12px;
+  }
+  .cert-icon{
+    width:28px;height:28px;flex-shrink:0;
+    background:#eb2f96;
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;
+  }
+  .cert-name{font-size:5px;color:#ff85c2;margin-bottom:4px}
+  .cert-org{font-size:5px;color:#ffadd2}
+  .cert-date{font-size:5px;color:#c41d7f;margin-top:4px}
+</style>
+
+<div class="portfolio">
+  <!-- stars bg -->
+  <div class="hero-stars" id="stars"></div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <!-- pixel avatar -->
+    <div class="avatar">
+      <canvas id="avatarCanvas" width="80" height="80" style="image-rendering:pixelated;width:80px;height:80px"></canvas>
+    </div>
+    <div class="name">AMBIKA M<span class="cursor">_</span></div>
+    <div class="tagline">
+      B.TECH CSE (DEVOPS)  •  PRESIDENCY UNIVERSITY, BENGALURU<br>
+      PYTHON  •  DOCKER  •  KUBERNETES  •  ML RESEARCHER
+    </div>
+    <div class="contact-row">
+      <div class="contact-chip" onclick="openLink('mailto:ambika.m.sharma2005@gmail.com')">✉ EMAIL</div>
+      <div class="contact-chip" onclick="openLink('https://linkedin.com/in/ambika-m-devops')">▣ LINKEDIN</div>
+      <div class="contact-chip" onclick="openLink('https://github.com/Ambika-hash')">◈ GITHUB</div>
+      <div class="contact-chip">☎ +91-9483764510</div>
+    </div>
+    <div class="pixel-deco">
+      <div class="pixel-heart"></div>
+      <div class="pixel-heart"></div>
+      <div class="pixel-heart"></div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showTab('about',this)">▸ ABOUT</button>
+    <button class="nav-btn" onclick="showTab('skills',this)">▸ SKILLS</button>
+    <button class="nav-btn" onclick="showTab('projects',this)">▸ QUESTS</button>
+    <button class="nav-btn" onclick="showTab('research',this)">▸ RESEARCH</button>
+    <button class="nav-btn" onclick="showTab('certs',this)">▸ CERTS</button>
+  </nav>
+
+  <!-- ABOUT -->
+  <div id="about" class="section active">
+    <div class="section-title">PLAYER PROFILE</div>
+    <div class="card">
+      <div class="card-title">OBJECTIVE</div>
+      <div class="card-sub">Motivated CS undergraduate specialising in DevOps — hands-on with Python, containerisation, and full-stack development. Building practical solutions to real-world problems. Seeking a placement in software development or DevOps engineering.</div>
+    </div>
+    <div class="section-title" style="margin-top:20px">EDUCATION LOG</div>
+    <div class="card">
+      <div class="card-title">B.TECH — CS & TECHNOLOGY (DEVOPS)</div>
+      <div class="card-sub">
+        Presidency University, Bengaluru<br>Expected: May 2027<br><br>
+        <span style="color:#eb2f96">★ CGPA: 8.97 / 10</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">HSC 12TH — 2023</div>
+      <div class="card-sub">Sri Sri Ravishankar Vidya Mandir</div>
+    </div>
+    <div class="card">
+      <div class="card-title">HSC 10TH — 2021</div>
+      <div class="card-sub">Orchids International School</div>
+    </div>
+    <div class="section-title" style="margin-top:20px">INTERNSHIP</div>
+    <div class="timeline">
+      <div style="margin-bottom:12px">
+        <div><span class="timeline-dot"></span><span class="timeline-title">SOFTWARE DEV INTERN (VIRTUAL)</span></div>
+        <div class="timeline-meta">Internpe  •  Jul 2024 – Aug 2024</div>
+        <div class="timeline-body">
+          • Designed and delivered multiple Python-based software projects.<br>
+          • Strengthened skills in problem decomposition, code structuring, and delivery under deadlines.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div id="skills" class="section">
+    <div class="section-title">SKILL TREE</div>
+    <div class="stat-row"><div class="stat-label">PYTHON</div><div class="stat-bar"><div class="stat-fill" style="--w:90%"></div></div><div class="stat-val">90%</div></div>
+    <div class="stat-row"><div class="stat-label">DOCKER / K8S</div><div class="stat-bar"><div class="stat-fill" style="--w:80%"></div></div><div class="stat-val">80%</div></div>
+    <div class="stat-row"><div class="stat-label">GIT / LINUX</div><div class="stat-bar"><div class="stat-fill" style="--w:80%"></div></div><div class="stat-val">80%</div></div>
+    <div class="stat-row"><div class="stat-label">MACHINE LEARNING</div><div class="stat-bar"><div class="stat-fill" style="--w:75%"></div></div><div class="stat-val">75%</div></div>
+    <div class="stat-row"><div class="stat-label">MYSQL / SQL</div><div class="stat-bar"><div class="stat-fill" style="--w:70%"></div></div><div class="stat-val">70%</div></div>
+    <div class="stat-row"><div class="stat-label">JAVA / C</div><div class="stat-bar"><div class="stat-fill" style="--w:45%"></div></div><div class="stat-val">45%</div></div>
+    <div class="stat-row"><div class="stat-label">R PROGRAMMING</div><div class="stat-bar"><div class="stat-fill" style="--w:60%"></div></div><div class="stat-val">60%</div></div>
+    <div class="stat-row"><div class="stat-label">OPENCV / CV</div><div class="stat-bar"><div class="stat-fill" style="--w:70%"></div></div><div class="stat-val">70%</div></div>
+    <div style="margin-top:20px" class="section-title">EQUIPMENT</div>
+    <div class="skills-grid">
+      <div class="skill-box">
+        <div class="skill-cat">LANGUAGES</div>
+        <span class="skill-item">Python ★★★</span>
+        <span class="skill-item">Java ★★☆</span>
+        <span class="skill-item">C ★★☆</span>
+        <span class="skill-item">R ★★★</span>
+      </div>
+      <div class="skill-box">
+        <div class="skill-cat">DEVOPS & CLOUD</div>
+        <span class="skill-item">Docker</span>
+        <span class="skill-item">Kubernetes</span>
+        <span class="skill-item">Linux</span>
+        <span class="skill-item">Git / GitHub</span>
+      </div>
+      <div class="skill-box">
+        <div class="skill-cat">TOOLS</div>
+        <span class="skill-item">VS Code</span>
+        <span class="skill-item">Arduino IDE</span>
+        <span class="skill-item">OpenCV</span>
+        <span class="skill-item">Raspberry Pi</span>
+      </div>
+      <div class="skill-box">
+        <div class="skill-cat">CONCEPTS</div>
+        <span class="skill-item">OOP</span>
+        <span class="skill-item">OS & DBMS</span>
+        <span class="skill-item">Data Structures</span>
+        <span class="skill-item">Data Visualisation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS / QUESTS -->
+  <div id="projects" class="section">
+    <div class="section-title">COMPLETED QUESTS</div>
+    <div class="card">
+      <div class="card-title">🤟 SIGN LANGUAGE → TEXT CONVERTER</div>
+      <div class="card-sub">Real-time gesture recognition for differently-abled individuals. Computer vision pipeline classifies hand signs with high accuracy and outputs text on-screen in real time.</div>
+      <div><span class="card-tag">Raspberry Pi</span><span class="card-tag">Python</span><span class="card-tag">OpenCV</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">♻ AUTOMATED WASTE SEGREGATOR</div>
+      <div class="card-sub">Hardware system to autonomously sort waste into biodegradable and non-biodegradable categories using sensor-based detection and servo-controlled sorting.</div>
+      <div><span class="card-tag">Arduino</span><span class="card-tag">Sensors</span><span class="card-tag">Servo Motors</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🗺 ROUTEWISE — RISK-AWARE NAV APP</div>
+      <div class="card-sub">Location-based safety app helping users choose safer travel routes. Incorporates risk scoring logic and data-driven decision-making for context-aware recommendations.</div>
+      <div><span class="card-tag">Python</span><span class="card-tag">Location Services</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 ARTHAMIND — PERSONAL FINANCE</div>
+      <div class="card-sub">Financial awareness tool for tracking spending, saving patterns, and money habits. User-friendly interface promoting smarter financial decisions.</div>
+      <div><span class="card-tag">Python</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 MEGHALAYA MIGRATION DASHBOARD</div>
+      <div class="card-sub">Real-time analytical dashboard for government officials to monitor population movement trends. Uses Aadhaar update data as migration proxy for proactive infrastructure planning.</div>
+      <div><span class="card-tag">Data Visualisation</span><span class="card-tag">Python</span></div>
+    </div>
+  </div>
+
+  <!-- RESEARCH -->
+  <div id="research" class="section">
+    <div class="section-title">RESEARCH LAB</div>
+    <div class="research-box">
+      <div class="research-badge">IEEE — UNDER PREPARATION</div>
+      <div class="card-title" style="font-size:6px;margin-bottom:10px;color:#ff85c2">ML-BASED PREDICTIVE ANALYSIS FOR RESOURCE UTILIZATION IN COMPUTING SYSTEMS</div>
+      <div class="card-sub">
+        Presidency University, Bengaluru  •  2024 – Present<br><br>
+        Applied 5 ML models to the Google Cluster Trace v3 dataset (200,000 records) across four prediction tasks. Engineered leakage-free features for peak CPU prediction and job failure classification.
+      </div>
+      <div class="metric-grid">
+        <div class="metric">
+          <span class="metric-val">0.9948</span>
+          <span class="metric-label">R² — Peak CPU</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val">0.9954</span>
+          <span class="metric-label">ROC-AUC — Job Failure</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val">200K</span>
+          <span class="metric-label">Records Analysed</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val">5</span>
+          <span class="metric-label">ML Models Used</span>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <span class="card-tag">Linear Regression</span>
+        <span class="card-tag">Ridge Regression</span>
+        <span class="card-tag">Decision Tree</span>
+        <span class="card-tag">Random Forest</span>
+        <span class="card-tag">Gradient Boosting</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">ENGINEERED FEATURES</div>
+      <div class="card-sub">
+        cpu_efficiency  •  mem_efficiency  •  tail_cpu_ratio<br><br>
+        Leakage-free pipeline — maximum_usage_cpus excluded to prevent data leakage across all prediction tasks.
+      </div>
+    </div>
+  </div>
+
+  <!-- CERTS -->
+  <div id="certs" class="section">
+    <div class="section-title">ACHIEVEMENTS UNLOCKED</div>
+    <div class="cert-list">
+      <div class="cert-item">
+        <div class="cert-icon">🏆</div>
+        <div>
+          <div class="cert-name">PYTHON FOR DATA SCIENCE</div>
+          <div class="cert-org">Samsung R&D Institute India</div>
+          <div class="cert-date">Jun – Jul 2025  •  Offline</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🥇</div>
+        <div>
+          <div class="cert-name">PYTHON: MASTERING ESSENTIALS</div>
+          <div class="cert-org">Scaler Topics</div>
+          <div class="cert-date">Mar – Apr 2025  •  Online</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🎖</div>
+        <div>
+          <div class="cert-name">R PROGRAMMING</div>
+          <div class="cert-org">Udemy</div>
+          <div class="cert-date">Sep – Oct 2024  •  Online</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px;text-align:center;font-size:5px;color:#c41d7f;line-height:2.5">
+      ════════════════════════════<br>
+      REFERENCES AVAILABLE ON REQUEST<br>
+      ════════════════════════════<br><br>
+      <span style="color:#eb2f96">♥ AMBIKA M  •  2025  ♥</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// pixel avatar (simple pixel art girl face)
+const c=document.getElementById('avatarCanvas');
+if(c){
+  const ctx=c.getContext('2d');
+  const S=10; // pixel size
+  const grid=[
+    [0,0,1,1,1,1,1,1,0,0],
+    [0,1,2,2,2,2,2,2,1,0],
+    [1,2,2,3,2,2,3,2,2,1],
+    [1,2,2,2,2,2,2,2,2,1],
+    [1,2,2,4,2,2,4,2,2,1],
+    [1,2,2,2,5,5,2,2,2,1],
+    [0,1,2,2,2,2,2,2,1,0],
+    [0,0,1,6,6,6,6,1,0,0],
+  ];
+  // hair=1, skin=2, eye=3, mouth=4, cheek=5, hair-bow=6
+  const colors={0:'transparent',1:'#c41d7f',2:'#ffddcc',3:'#1a0010',4:'#eb2f96',5:'#ffadd2',6:'#ff85c2'};
+  grid.forEach((row,r)=>row.forEach((v,col)=>{
+    if(v===0)return;
+    ctx.fillStyle=colors[v];
+    ctx.fillRect(col*S,r*S,S,S);
+  }));
+}
+
+// stars
+const starsEl=document.getElementById('stars');
+for(let i=0;i<30;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.left=Math.random()*100+'%';
+  s.style.top=Math.random()*100+'%';
+  s.style.animationDelay=(Math.random()*2)+'s';
+  if(Math.random()>0.7){s.style.width='6px';s.style.height='6px'}
+  starsEl.appendChild(s);
+}
+</script>
